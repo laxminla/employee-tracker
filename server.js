@@ -4,7 +4,7 @@ const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const consoleTable = require('console.table');
 const Connection = require('mysql2/typings/mysql/lib/Connection');
-
+const cTable = require('console.table');
 // Connect to database
 const db = mysql.createConnection(
   {
@@ -24,19 +24,19 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+  console.log(`Server running on port ${PORT}`);
+});
 
-  // connection to mysql server and database
-  Connection.connect(function(err){
-    if(err) throw err;
+// connection to mysql server and database
+Connection.connect(function (err) {
+  if (err) throw err;
   console.log('SQL connected')
   Start();
-  });
+});
 
 
 
-function start(){
+function start() {
   inquirer.prompt([
     {
       type: "list",
@@ -44,32 +44,58 @@ function start(){
       choices: ["View", "Add", "Update", "Exit"],
       message: "We have information on employees, departments, and employee roles. What would you like to do?",
     }
-  ]).then (function(res){
-    switch(res.start){
+  ]).then(function (res) {
+    switch (res.start) {
       case 'View':
-      View();
-      break; 
-      
+        View();
+        break;
+
       case 'Add':
         Add();
-        break; 
+        break;
 
-        case 'Update':
-          updateEmployee();
-          break; 
+      case 'Update':
+        updateEmployee();
+        break;
 
-          case 'Exit':
-            console.log('-------------');
-            console.log('All done');
-            console.log('--------------');
-            break; 
-        default:
-          console.log('default')
+      case 'Exit':
+        console.log('-------------');
+        console.log('All done');
+        console.log('--------------');
+        break;
+      default:
+        console.log('default')
     }
   })
 };
 
 // view function
+function view() {
+  inquirer.prompt([
+    {
+      type: "list",
+      name: "view",
+      choices: ['All employes', 'By department', 'By Role'],
+      message: 'Select one to view'
+    }
+  ]).then(function (res) {
+    switch (res.view) {
+      case 'All employees':
+        viewAllEmployees();
+        break;
+      case 'By department':
+        viewByDeapartment();
+        break;
+      case 'By role':
+        viewByRole();
+        break;
+      default:
+        console.log('default')
+
+    }
+  });
+
+}
 
 
 
