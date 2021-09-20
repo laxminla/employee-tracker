@@ -74,7 +74,7 @@ function start() {
         break;
 
       case 'Add Employee':
-        // addEmployee();
+        addEmployee();
         break;
 
       case 'Update Employee':
@@ -165,6 +165,43 @@ function addRole() {
   })
 
 };
+
+function addEmployee() {
+  inquirer.prompt([
+    {
+      type: "input",
+      name: "employeeFirstName",
+      message: 'What is the first name of the employee?'
+    },
+    {
+      type: "input",
+      name: "employeeLastName",
+      message: 'What is the last name of the employee?'
+    },
+    {
+      type: "input",
+      name: "employeeRoleId",
+      message: 'What is the role ID of the employee?'
+    },
+    {
+      type: "input",
+      name: "employeeManagerId",
+      message: 'What is the employee manager ID?'
+    },
+  ]).then(function (res) {
+    const query = "INSERT INTO employee SET ?";
+    connection.query(query, {
+      first_name: res.employeeFirstName,
+      last_name: res.employeeLastName,
+      role_id: res.employeeRoleId,
+      manager_id: res.employeeManagerId
+    });
+    viewEmployees();
+  })
+
+};
+
+
 
 
 // Update function
