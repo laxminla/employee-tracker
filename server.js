@@ -3,6 +3,7 @@ const express = require('express')
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const cTable = require('console.table');
+const { restoreDefaultPrompts } = require('inquirer');
 // Connect to database
 const connection = mysql.createConnection(
   {
@@ -181,12 +182,22 @@ function addEmployee() {
     {
       type: "input",
       name: "employeeRoleId",
-      message: 'What is the role ID of the employee?'
+      message: 'What is the role of the employee?'
     },
     {
+      // type: "input",
+      // name: "employeeManagerId",
+      // message: 'What is the employee manager ID?'
+      name: "manager",
       type: "input",
-      name: "employeeManagerId",
-      message: 'What is the employee manager ID?'
+      validate: function (value) {
+        if (isNaN(value) === false) {
+          return true;
+        }
+        return false;
+      },
+      message: "Enter manager ID",
+      default: "1"
     },
   ]).then(function (res) {
     const query = "INSERT INTO employee SET ?";
@@ -194,7 +205,7 @@ function addEmployee() {
       first_name: res.employeeFirstName,
       last_name: res.employeeLastName,
       role_id: res.employeeRoleId,
-      manager_id: res.employeeManagerId
+      manager_id: res.manager
     });
     viewEmployees();
   })
@@ -231,6 +242,13 @@ function update() {
   })
 
 };
+
+
+
+
+
+
+
 
 
 
